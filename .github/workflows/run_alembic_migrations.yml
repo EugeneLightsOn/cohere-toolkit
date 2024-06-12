@@ -21,6 +21,7 @@ jobs:
         USE_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
         # Check if the SSH params or all params are present we will use SSH to run migrations.
         USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') }}
+
     steps:
         - name: Run Alembic Migrations SSH
           if: ${{ (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'false') || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
@@ -28,11 +29,9 @@ jobs:
             env
             echo "Running migrations using SSH"
             echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-            ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST}
-#              # Now we have got the access of EC2 and we will start the deploy .
-              cd ~/cohere-toolkit &&
-              pwd   
-              '
+            ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST} '
+              cd ~/cohere-toolkit && \
+              pwd
         - name: Run Alembic Migrations API
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'false') }}
           run: |
