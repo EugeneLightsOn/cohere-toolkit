@@ -26,6 +26,7 @@ jobs:
         - name: Run Alembic Migrations SSH
           if: ${{ (env.USE_SSH && !env.USE_MIGRATION_API && !env.USE_DATABASE_URL) || (env.USE_SSH && env.USE_MIGRATION_API && env.USE_DATABASE_URL) }}
           run: |
+            env
             echo "Running migrations using SSH"
 #          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
 #          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOSTNAME} '
