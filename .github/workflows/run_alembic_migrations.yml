@@ -24,7 +24,7 @@ jobs:
 
     steps:
         - name: Run Alembic Migrations SSH
-          if: ${{ (env.USE_SSH && ! env.USE_MIGRATION_API && ! env.USE_DATABASE_URL == false) || (env.USE_SSH && env.USE_MIGRATION_API && env.USE_DATABASE_URL) }}
+          if: ${{ (env.USE_SSH && ! env.USE_MIGRATION_API && ! env.USE_DATABASE_URL) || (env.USE_SSH && env.USE_MIGRATION_API && env.USE_DATABASE_URL) }}
           run: |
             env
             echo "Running migrations using SSH"
@@ -51,6 +51,6 @@ jobs:
           run: |
             echo "Running migrations using the database URL"
         - name: Fail Migration
-          if: ${{ (!env.USE_SSH && !env.USE_MIGRATION_API && !env.USE_DATABASE_URL) }}
+          if: ${{ (! env.USE_SSH && ! env.USE_MIGRATION_API && ! env.USE_DATABASE_URL) }}
           run: |
             echo "Migaration failed. Please provide either SSH, Migration API or Database URL to run migrations."
