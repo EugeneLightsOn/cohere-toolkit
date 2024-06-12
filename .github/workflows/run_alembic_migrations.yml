@@ -53,7 +53,7 @@ jobs:
             export POETRY_VIRTUALENVS_IN_PROJECT=true
             poetry install
             echo "DATABASE_URL=$DATABASE_URL" > .env
-            tail .env -10
+            tail -10 .env
             source .venv/bin/activate
             alembic -c src/backend/alembic.ini upgrade head
         - name: Fail Migration
