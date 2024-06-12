@@ -21,7 +21,7 @@ env:
 jobs:
   run-alembic-migrations-ssh:
     runs-on: ubuntu-latest
-    if: (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false)
+    if: ${{ (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false) }}
     steps:
         - name: Run Alembic Migrations SSH
           run: |
@@ -42,7 +42,7 @@ jobs:
 #              '
   run-alembic-migrations:
     runs-on: ubuntu-latest
-    if: (env.USE_SSH == false) && (env.USE_MIGRATION_API == true) && (env.USE_DATABASE_URL == false)
+    if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == true) && (env.USE_DATABASE_URL == false) }}
     steps:
       - name: Run Alembic Migrations
         run: |
@@ -50,7 +50,7 @@ jobs:
   run-alembic-migrations-database:
     name: Run Alembic Migrations Database
     runs-on: ubuntu-latest
-    if: (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true)
+    if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true) }}
     steps:
       - name: Run Alembic Migrations
         run: |
