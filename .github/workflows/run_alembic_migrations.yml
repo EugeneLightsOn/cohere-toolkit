@@ -14,7 +14,6 @@ jobs:
         DATABASE_URL: ${{secrets.DATABASE_URL}}
         MIGRATION_API_ENDPOINT: ${{secrets.MIGRATION_API_ENDPOINT}}
         MIGRATION_API_TOKEN: ${{secrets.MIGRATION_API_TOKEN}}
-        PROJECT_DIR: ~/cohere-toolkit
         # Check if the migration API params are present we will use the migration API to run migrations.
         USE_MIGRATION_API: ${{ (secrets.MIGRATION_API_ENDPOINT != '') && (secrets.MIGRATION_API_TOKEN != '') }}
         # Check if the database URL is present we will use the database URL to run migrations.
@@ -31,7 +30,7 @@ jobs:
             echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST}
 #              # Now we have got the access of EC2 and we will start the deploy .
-              cd $PROJECT_DIR &&
+              cd ~/cohere-toolkit &&
               pwd   
               '
         - name: Run Alembic Migrations API
