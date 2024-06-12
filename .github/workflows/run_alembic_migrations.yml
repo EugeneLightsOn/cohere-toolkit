@@ -21,9 +21,9 @@ env:
 jobs:
   run-alembic-migrations-ssh:
     runs-on: ubuntu-latest
-    if: ${{ (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false) }}
     steps:
         - name: Run Alembic Migrations SSH
+          if: ${{ (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false) }}
           run: |
             echo "Running migrations using SSH"
 #          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
@@ -40,18 +40,24 @@ jobs:
 #              sudo pm2 stop ./dist/index.js &&
 #              sudo pm2 start ./dist/index.js
 #              '
-  run-alembic-migrations:
+  run-alembic-migrations-api:
     runs-on: ubuntu-latest
-    if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == true) && (env.USE_DATABASE_URL == false) }}
     steps:
       - name: Run Alembic Migrations
+        if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == true) && (env.USE_DATABASE_URL == false) }}
         run: |
           echo "Running migrations using the migration API"
   run-alembic-migrations-database:
-    name: Run Alembic Migrations Database
     runs-on: ubuntu-latest
-    if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true) }}
     steps:
-      - name: Run Alembic Migrations
+      - name: Run Alembic Migrations Database
+        if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true) }}
         run: |
           echo "Running migrations using the database URL"
+  run-alembic-migrations-errors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Alembic Migrations Failed
+        if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false) }}
+        run: |
+          echo "Migaration failed. Please provide either SSH, Migration API or Database URL to run migrations."
