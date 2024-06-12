@@ -31,8 +31,8 @@ jobs:
             echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST} '
                 export SSH_PROJECT_DIR=~/cohere-toolkit && # Set the project directory here
-                sh $SSH_PROJECT_DIR/.github/scripts/run_docker_migration.sh && # Delete this if your toolkit is not in a docker container
-                sh $SSH_PROJECT_DIR/.github/scripts/run_src_migration.sh # Delete this if your toolkit is in a docker container
+                # sh $SSH_PROJECT_DIR/.github/scripts/run_docker_migration.sh && # Delete this command if your toolkit is not in a docker container
+                sh $SSH_PROJECT_DIR/.github/scripts/run_src_migration.sh # Delete this command if your toolkit is in a docker container
             '
         - name: Run Alembic Migrations API
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'false') }}
