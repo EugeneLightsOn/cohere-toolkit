@@ -31,9 +31,6 @@ jobs:
             echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST} '
                 export SSH_PROJECT_DIR=~/cohere-toolkit && # Set the project directory here
-                cd $SSH_PROJECT_DIR &&
-                git fetch origin TLK-580_automated_migrations &&
-                git checkout TLK-580_automated_migrations &&
                 sh .github/scripts/run_docker_migration.sh && # Delete this if your toolkit is not in a docker container
                 sh .github/scripts/run_src_migration.sh # Delete this if your toolkit is in a docker container
             '
