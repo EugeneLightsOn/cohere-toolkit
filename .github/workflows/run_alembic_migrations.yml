@@ -40,6 +40,10 @@ jobs:
             echo "Running migrations using the migration API"
         - name: Checkout repository
           uses: actions/checkout@v4
+        - name: Set up Python 3.10
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.11"
         - name: Run Alembic Migrations Database
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'true')  || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
           run: |
