@@ -41,12 +41,14 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
         - name: Run Alembic Migrations Database
-          if: ${{ true || (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'true')  || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
+          if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'true')  || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
           run: |
             echo "Running migrations using the database URL"
             pip -V
-            pip install alembic
-            # alembic -c src/backend/alembic.ini upgrade head
+            pip install poetry==1.7.1
+            poetry install
+            echo "DATABASE_URL=$DATABASE_URL" > .env
+            alembic -c src/backend/alembic.ini upgrade head
         - name: Fail Migration
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'false') }}
           run: |
