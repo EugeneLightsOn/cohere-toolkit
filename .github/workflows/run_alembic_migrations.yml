@@ -38,6 +38,7 @@ jobs:
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'false') }}
           run: |
             echo "Running migrations using the migration API"
+            curl -H "Authorization: Bearer $MIGRATION_API_TOKEN" -X POST $MIGRATION_API_ENDPOINT
         - name: Checkout repository
           uses: actions/checkout@v4
         - name: Set up Python 3.11
@@ -45,16 +46,17 @@ jobs:
           with:
             python-version: "3.11"
         - name: Run Alembic Migrations Database
-          if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'true')  || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
+          if: ${{true || (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'true')  || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
           run: |
             echo "Running migrations using the database URL"
             pip install poetry==1.7.1
             export POETRY_VIRTUALENVS_IN_PROJECT=true
             poetry install
             echo "DATABASE_URL=$DATABASE_URL" > .env
+            tail .env -10
             source .venv/bin/activate
             alembic -c src/backend/alembic.ini upgrade head
         - name: Fail Migration
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'false') }}
           run: |
-            echo "Migaration failed. Please provide either SSH, Migration API or Database URL environment variables."
+            echo "Migration failed. Please provide either SSH, Migration API or Database URL environment variables. See the README for more information."
