@@ -12,14 +12,14 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         SSH_HOST: ${{secrets.SSH_HOST}}
         SSH_USER_NAME: ${{secrets.SSH_USER_NAME}}
-        DATABASE_URL: ${{secrets.DATABASE_URL}}
+        DATABASE_URL: ${{secrets.MIGRATION_DATABASE_URL}}
         MIGRATION_API_ENDPOINT: ${{secrets.MIGRATION_API_ENDPOINT}}
         MIGRATION_API_TOKEN: ${{secrets.MIGRATION_API_TOKEN}}
         # Check if the migration API params are present we will use the migration API to run migrations.
         USE_MIGRATION_API: ${{ (secrets.MIGRATION_API_ENDPOINT != '') && (secrets.MIGRATION_API_TOKEN != '') }}
         # Check if the database URL is present we will use the database URL to run migrations.
         # Please note that the database connection should be open to the IP from where the migrations are being run.
-        USE_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
+        USE_DATABASE_URL: ${{ secrets.MIGRATION_DATABASE_URL != '' }}
         # Check if the SSH params or all params are present we will use SSH to run migrations.
         USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') && (secrets.SSH_PROJECT_DIR != '')}}
 
@@ -48,7 +48,6 @@ jobs:
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'true')  || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
           run: |
             echo "Running migrations using the database URL"
-            pip -V
             pip install poetry==1.7.1
             export POETRY_VIRTUALENVS_IN_PROJECT=true
             poetry install
