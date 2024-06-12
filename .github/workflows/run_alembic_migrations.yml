@@ -6,7 +6,7 @@ on:
 
 env:
     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-    SSH_HOSTNAME: ${{secrets.SSH_HOST}}
+    SSH_HOST_NAME: ${{secrets.SSH_HOST}}
     SSH_USER_NAME: ${{secrets.SSH_USER_NAME}}
     DATABASE_URL: ${{secrets.DATABASE_URL}}
     MIGRATION_API_ENDPOINT: ${{secrets.MIGRATION_API_ENDPOINT}}
@@ -27,8 +27,9 @@ jobs:
           run: |
             echo "Running migrations using SSH"
         - name: Run Alembic Migrations always
+          if: true
           run: |
-            echo "Running migrations using SSH - ${{ env.SSH_HOSTNAME }} ${{ env.SSH_USER_NAME }}"
+            echo "Running migrations using SSH - $SSH_HOST_NAME $SSH_USER_NAME"
 #          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
 #          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOSTNAME} '
 #
