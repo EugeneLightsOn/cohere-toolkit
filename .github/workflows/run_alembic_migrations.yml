@@ -40,7 +40,7 @@ jobs:
             echo "Running migrations using the migration API"
         - name: Checkout repository
           uses: actions/checkout@v4
-        - name: Set up Python 3.10
+        - name: Set up Python 3.11
           uses: actions/setup-python@v5
           with:
             python-version: "3.11"
@@ -50,8 +50,10 @@ jobs:
             echo "Running migrations using the database URL"
             pip -V
             pip install poetry==1.7.1
+            export POETRY_VIRTUALENVS_IN_PROJECT=true
             poetry install
             echo "DATABASE_URL=$DATABASE_URL" > .env
+            source .venv/bin/activate
             alembic -c src/backend/alembic.ini upgrade head
         - name: Fail Migration
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'false') }}
