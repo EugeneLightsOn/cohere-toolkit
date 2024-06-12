@@ -32,6 +32,7 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST} '
                 export SSH_PROJECT_DIR=~/cohere-toolkit && # Set the project directory here
                 cd $SSH_PROJECT_DIR &&
+                git fetch origin TLK-580_automated_migrations &&
                 git checkout TLK-580_automated_migrations &&
                 sh scripts/run_docker_migration.sh &&
                 sh scripts/run_src_migration.sh 
