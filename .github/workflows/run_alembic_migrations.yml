@@ -26,6 +26,9 @@ jobs:
           if: ${{ (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false) }}
           run: |
             echo "Running migrations using SSH"
+        - name: Run Alembic Migrations always
+          run: |
+            echo "Running migrations using SSH - ${{ env.SSH_HOSTNAME }} ${{ env.SSH_USER_NAME }}"
 #          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
 #          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOSTNAME} '
 #
@@ -51,6 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Alembic Migrations Database
+          echo "Running migrations using the database URL"
         if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true) }}
         run: |
           echo "Running migrations using the database URL"
