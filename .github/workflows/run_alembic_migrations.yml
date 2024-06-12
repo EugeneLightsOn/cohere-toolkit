@@ -32,6 +32,7 @@ jobs:
             echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST} '
               cd $SSH_PROJECT_DIR &&
+              ls &&
               git pull origin TLK-580_automated_migrations &&
               sh scripts/run_docker_migration.sh &&
               sh scripts/run_src_migration.sh 
