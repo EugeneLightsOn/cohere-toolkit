@@ -19,15 +19,13 @@ env:
     # Please note that the database connection should be open to the IP from where the migrations are being run.
     USE_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
 jobs:
-  run-alembic-migrations:
-    name: Run Alembic Migrations
+  run-alembic-migrations-ssh:
     runs-on: ubuntu-latest
+    if: (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false)
     steps:
-      - uses: actions/checkout@v2
-      - name: Run Alembic Migrations - SSH
-      - if: ${{ (env.USE_SSH == true) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == false) }}
-        run: |
-          echo "Running migrations using SSH"
+        - name: Run Alembic Migrations SSH
+          run: |
+            echo "Running migrations using SSH"
 #          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
 #          ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOSTNAME} '
 #
@@ -42,10 +40,18 @@ jobs:
 #              sudo pm2 stop ./dist/index.js &&
 #              sudo pm2 start ./dist/index.js
 #              '
-      - if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == true) && (env.USE_DATABASE_URL == false) }}
+  run-alembic-migrations:
+    runs-on: ubuntu-latest
+    if: (env.USE_SSH == false) && (env.USE_MIGRATION_API == true) && (env.USE_DATABASE_URL == false)
+    steps:
+      - name: Run Alembic Migrations
         run: |
-                echo "Running migrations using the migration API"
-      - if: ${{ (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true) }}
+          echo "Running migrations using the migration API"
+  run-alembic-migrations-database:
+    name: Run Alembic Migrations Database
+    runs-on: ubuntu-latest
+    if: (env.USE_SSH == false) && (env.USE_MIGRATION_API == false) && (env.USE_DATABASE_URL == true)
+    steps:
+      - name: Run Alembic Migrations
         run: |
-                echo "Running migrations using the database URL"
-          
+          echo "Running migrations using the database URL"
