@@ -21,7 +21,7 @@ jobs:
         # Please note that the database connection should be open to the IP from where the migrations are being run.
         USE_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
         # Check if the SSH params or all params are present we will use SSH to run migrations.
-        USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') && (secrets.SSH_PROJECT_DIRECTORY != '')}}
+        USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') && (secrets.SSH_PROJECT_DIR != '')}}
 
     steps:
         - name: Run Alembic Migrations SSH
