@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
+        SSH_PROJECT_DIR: ${{ secrets.SSH_PROJECT_DIR }}
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         SSH_HOST: ${{secrets.SSH_HOST}}
         SSH_USER_NAME: ${{secrets.SSH_USER_NAME}}
@@ -20,18 +21,20 @@ jobs:
         # Please note that the database connection should be open to the IP from where the migrations are being run.
         USE_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
         # Check if the SSH params or all params are present we will use SSH to run migrations.
-        USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') }}
+        USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') && (secrets.SSH_PROJECT_DIRECTORY != '')}}
 
     steps:
         - name: Run Alembic Migrations SSH
           if: ${{ (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'false') }}
           run: |
+            env
             echo "Running migrations using SSH"
             echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
             ssh -o StrictHostKeyChecking=no -i private_key ${SSH_USER_NAME}@${SSH_HOST} '
-              cd ~/cohere-toolkit &&
-              ls &&
-              pwd
+              cd $SSH_PROJECT_DIR &&
+              git pull origin TLK-580_automated_migrations &&
+              sh scripts/run_docker_migration.sh &&
+              sh scripts/run_src_migration.sh 
             '
         - name: Run Alembic Migrations API
           if: ${{ (env.USE_SSH == 'false' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'false') }}
