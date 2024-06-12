@@ -22,7 +22,6 @@ jobs:
         USE_DATABASE_URL: ${{ secrets.DATABASE_URL != '' }}
         # Check if the SSH params or all params are present we will use SSH to run migrations.
         USE_SSH: ${{ (secrets.SSH_PRIVATE_KEY != '') && (secrets.SSH_HOST != '') && (secrets.SSH_USER_NAME != '') }}
-
     steps:
         - name: Run Alembic Migrations SSH
           if: ${{ (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'false' && env.USE_DATABASE_URL == 'false') || (env.USE_SSH == 'true' && env.USE_MIGRATION_API == 'true' && env.USE_DATABASE_URL == 'true') }}
