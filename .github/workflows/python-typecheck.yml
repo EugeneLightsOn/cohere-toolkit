@@ -25,4 +25,4 @@ jobs:
         run: |
             git fetch origin main
             git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$'
-            
+            NEW_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$')
