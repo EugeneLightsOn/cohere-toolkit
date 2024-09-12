@@ -2,7 +2,7 @@ name: Typecheck
 
 on:
   push:
-    branches: [eugene/test-workflow]
+    branches: [main]
   pull_request: {}
 
 jobs:
