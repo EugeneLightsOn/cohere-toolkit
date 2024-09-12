@@ -25,4 +25,4 @@ jobs:
         run: |
             git fetch origin main
             NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$')
-            echo "::set-output name=new_py_files::$NEW_PY_FILES"
+            echo "added_files=$NEW_PY_FILES" >> $GITHUB_OUTPUT"
