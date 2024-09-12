@@ -23,5 +23,5 @@ jobs:
       - name: Get new files added in the PR
         id: get_new_files
         run: |
-          git diff origin/main HEAD
-          
+            git fetch origin main
+            git diff origin/main HEAD
