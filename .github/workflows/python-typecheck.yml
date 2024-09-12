@@ -21,10 +21,9 @@ jobs:
         with:
           version: 1.1.311
       - name: Get new files added in the PR
-      - id: get_new_files
-      - run: git fetch origin main
-      - run: |
-          # Get only .py files that were newly added
+        id: get_new_files
+        run: |
+          git fetch origin main
           NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main...HEAD | grep '\.py$')
           echo "Newly added Python files: $NEW_PY_FILES"
           echo "::set-output name=new_py_files::$NEW_PY_FILES"
