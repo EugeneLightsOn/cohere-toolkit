@@ -20,9 +20,8 @@ jobs:
       - uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
-      - name: Get changed files
-        uses: tj-actions/changed-files@v32
-        id: changed_files
-      - name: Show only new files
-        run: echo "${{ steps.changed_files.outputs.added_files }}"
-
+      - name: Get new files added in the PR
+        id: get_new_files
+        run: |
+          git diff origin/main...HEAD
+          
