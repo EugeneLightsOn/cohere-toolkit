@@ -2,7 +2,7 @@ name: Typecheck
 
 on:
   push:
-    branches: [main]
+    branches: [test-workflow]
   pull_request: {}
 
 jobs:
@@ -20,3 +20,12 @@ jobs:
       - uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
+      - name: Get new files added in the PR
+        id: get_new_files
+        run: |
+          git fetch origin main
+          # Get only .py files that were newly added
+          NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main...HEAD | grep '\.py$')
+          echo "Newly added Python files: $NEW_PY_FILES"
+          echo "::set-output name=new_py_files::$NEW_PY_FILES"
+          
