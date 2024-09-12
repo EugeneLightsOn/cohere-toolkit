@@ -20,16 +20,9 @@ jobs:
       - uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
-          extra-args: src/backend/services/flow_test/metrics_flow_test1.py src/backend/services/metrics_flow_test1.py
       - name: Get new files added in the PR
         id: get_new_files
         run: |
             git fetch origin main
-            echo 'new_py_files<<EOF' >> $GITHUB_OUTPUT
-            git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$'
-            echo 'EOF' >> $GITHUB_OUTPUT
-      - name: Typecheck new files
-        run: |  
-          new_py_files="${{ steps.get_new_files.outputs.new_py_files }}"
-          echo "Checking new Python files with Pyright: $new_py_files"
-
+            NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$' | tr '\n' ' ')
+            echo "$NEW_PY_FILES"
