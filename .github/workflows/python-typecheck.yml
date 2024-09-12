@@ -20,6 +20,7 @@ jobs:
       - uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
+          extra-args: src/backend/services/flow_test/metrics_flow_test1.py, src/backend/services/metrics_flow_test1.py
       - name: Get new files added in the PR
         id: get_new_files
         run: |
