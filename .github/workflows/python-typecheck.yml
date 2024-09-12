@@ -24,10 +24,10 @@ jobs:
         id: get_new_files
         run: |
             git fetch origin main
-            NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$' | tr '\n' ' ')
+            NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$')
             echo "new_py_files=$NEW_PY_FILES" >> $GITHUB_OUTPUT
       - name: Typecheck new files
         uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
-          files: ${{ steps.get_new_files.outputs.new_py_files }}
+          extra-args: ${{ steps.get_new_files.outputs.new_py_files }}
