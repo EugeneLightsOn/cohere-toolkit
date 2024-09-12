@@ -24,4 +24,4 @@ jobs:
         id: get_new_files
         run: |
             git fetch origin main
-            git diff origin/main HEAD
+            git diff --name-only --diff-filter=A origin/main HEAD
