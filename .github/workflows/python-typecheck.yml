@@ -20,11 +20,15 @@ jobs:
       - uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
-      - name: Get new files added in the PR and typecheck them
+      - name: Get new files added in the PR
         id: get_new_files
         run: |
             git fetch origin main
-            NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$')
-            for file in $NEW_PY_FILES; do
-              pyright $file
-            done
+            echo 'new_py_files<<EOF' >> $GITHUB_OUTPUT
+            git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$'
+            echo 'EOF' >> $GITHUB_OUTPUT
+      - name: Typecheck new files
+        run: |  
+          new_py_files="${{ steps.get_new_files.outputs.new_py_files }}"
+          echo "Checking new Python files with Pyright: $new_py_files"
+
