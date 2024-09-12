@@ -25,15 +25,9 @@ jobs:
         run: |
             git fetch origin main
             NEW_PY_FILES=$(git diff --name-only --diff-filter=A origin/main HEAD | grep '\.py$' | tr '\n' ' ')
+            echo "New files: $NEW_PY_FILES"
             echo "new_py_files=$NEW_PY_FILES" >> $GITHUB_OUTPUT
       - name: Typecheck new files
-        run: |
-            echo "${{ steps.get_new_files.outputs.new_py_files }}"
-            if [ -z "${{ steps.get_new_files.outputs.new_py_files }}" ]; then
-                echo "No new python files to typecheck"
-            else
-                echo "Typechecking new python files"
-            fi
         uses: jakebailey/pyright-action@v2
         with:
           version: 1.1.311
