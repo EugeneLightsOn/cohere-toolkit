@@ -16,7 +16,8 @@ jobs:
           python-version: '3.11' 
           cache: 'poetry'
       - run: poetry install
-      - run: echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+      - run: | 
+              echo "AAA: $(poetry env info --path)/bin"
       - name: Get new files added in the PR
         id: get_new_files
         run: |
