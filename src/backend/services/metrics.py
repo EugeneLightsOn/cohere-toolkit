@@ -215,7 +215,7 @@ def collect_metrics_chat_stream(func: Callable) -> Callable:
             ChatMetricHelper.report_streaming_chat_event(v, ctx, **kwargs)
             yield v
 
-    return []
+    return wrapper
 
 
 def collect_metrics_rerank(func: Callable) -> Callable:
