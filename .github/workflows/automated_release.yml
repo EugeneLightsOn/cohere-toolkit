@@ -72,7 +72,7 @@ jobs:
             echo "Changelog:"
             echo "$changelog"
           fi
-          description="${changelog}<br/><br/>${description}"
+          description="${changelog}<h2>${description}</h2>"
           echo "Creating release with title: $release_title"
           echo "Creating release with notes: $description"
           gh release create "${file_version}" \
