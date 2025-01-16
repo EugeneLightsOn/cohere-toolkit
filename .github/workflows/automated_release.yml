@@ -77,5 +77,5 @@ jobs:
           echo "Creating release with notes: $description"
           gh release create "${file_version}" \
             --title "$release_title" --draft \
-            --notes "$description"
+            --notes "$(echo -e "$description")"
           echo "Release created successfully."
