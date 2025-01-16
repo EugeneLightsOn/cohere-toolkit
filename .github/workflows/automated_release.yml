@@ -63,8 +63,8 @@ jobs:
         run: |
           echo "Generating changelog from ${{ env.latest_release }} to ${{ env.file_version }}..."
           latest_release_date=$(gh release view "${{ env.latest_release }}" --json createdAt --jq '.createdAt')
-          gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,url
-          changes=$(gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,url --jq '.[] | "* [" + .title + "](" + .url + ")"')
+          gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,url,number
+          changes=$(gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,number,url --jq '.[] | "- PR #" + (.number|tostring) + ": [" + .title + "](" + .url + ")"')
           if [[ -z "$changelog" ]]; then
             echo "No pull requests found since the last release."
             echo "changelog=No changes since the last release." >> $GITHUB_ENV
