@@ -60,7 +60,6 @@ jobs:
           release_title="${release_date} (${pushed_version})"
           description="### Full Changelog: https://github.com/${GITHUB_REPOSITORY}/compare/${latest_release}...${pushed_version}"
           latest_release_date=$(gh release view "${latest_release}" --json createdAt --jq '.createdAt')
-          gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,url,number
           changelog=$(gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,number,url --jq '.[] | "- PR #" + (.number|tostring) + ": " + .title')
           if [[ -z "$changelog" ]]; then
             echo "No pull requests found since the last release."
