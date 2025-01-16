@@ -57,6 +57,8 @@ jobs:
       # Changelog generation
       - name: Generate pull request changelog
         id: generate_changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Generating changelog from ${{ env.latest_release }} to ${{ env.file_version }}..."
           changelog=$(gh pr list --state merged --base main --search "merged:>${{ env.latest_release }}" --json title --jq '.[].title')
