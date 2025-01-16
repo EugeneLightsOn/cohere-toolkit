@@ -71,7 +71,7 @@ jobs:
           else
             echo "Changelog:"
             echo "$changelog"
-            echo "changelog=$changelog" >> $GITHUB_OUTPUT
+            echo "changelog=$changelog" >> $GITHUB_ENV
           fi
 
       # Create a new release if the version is greater
@@ -83,7 +83,7 @@ jobs:
           release_date=$(date +'%Y-%m-%d')
           release_title="${release_date} (${file_version})"
           description="**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/${latest_release}...${file_version}"
-          changelog="${{ steps.generate_changelog.outputs.changelog }}"
+          changelog="${changelog}"
           echo "Creating release with title: $release_title"
           echo "Creating release with notes: $description"
           gh release create "${file_version}" \
