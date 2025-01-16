@@ -62,8 +62,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Generating changelog from ${{ env.latest_release }} to ${{ env.file_version }}..."
-          gh pr list --state merged --base main --search "merged:>${{ env.latest_release }}" --json title
-          changelog=$(gh pr list --state merged --base main --search "merged:>${{ env.latest_release }}" --json title --jq '.[].title')
+          latest_release_date=$(gh release view ">${{ env.latest_release }}" --json createdAt --jq '.createdAt')
+          changelog=$(gh pr list --state merged --base main --search "merged:>${latest_release_date}" --json title --jq '.[].title')
           if [[ -z "$changelog" ]]; then
             echo "No pull requests found since the last release."
             echo "changelog=No changes since the last release." >> $GITHUB_ENV
