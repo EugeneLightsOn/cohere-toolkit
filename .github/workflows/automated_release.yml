@@ -57,6 +57,7 @@ jobs:
       # Changelog generation
       - name: Generate pull request changelog
         id: generate_changelog
+        if: env.new_version_needed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
