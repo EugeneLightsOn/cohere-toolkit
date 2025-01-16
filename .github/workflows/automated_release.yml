@@ -54,15 +54,16 @@ jobs:
             exit 0
           fi
 
-      # Changelog generation
-      - name: Generate pull request changelog
-        id: generate_changelog
-#        if: env.new_version_needed == 'true'
+      # Create a new release if the version is greater
+      - name: Create new release
+        if: env.new_version_needed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Generating changelog from ${{ env.latest_release }} to ${{ env.file_version }}..."
-          latest_release_date=$(gh release view "${{ env.latest_release }}" --json createdAt --jq '.createdAt')
+          release_date=$(date +'%Y-%m-%d')
+          release_title="${release_date} (${file_version})"
+          description="**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/${latest_release}...${file_version}"
+          latest_release_date=$(gh release view "${latest_release}" --json createdAt --jq '.createdAt')
           gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,url,number
           changelog=$(gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,number,url --jq '.[] | "- PR #" + (.number|tostring) + ": [" + .title + "](" + .url + ")"')
           if [[ -z "$changelog" ]]; then
@@ -73,17 +74,7 @@ jobs:
             echo "$changelog"
             echo "changelog=$changelog" >> $GITHUB_ENV
           fi
-
-      # Create a new release if the version is greater
-      - name: Create new release
-        if: env.new_version_needed == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          release_date=$(date +'%Y-%m-%d')
-          release_title="${release_date} (${file_version})"
-          description="**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/${latest_release}...${file_version}"
-          changelog="${changelog}"
+          description="${changelog}\n\n${description}"
           echo "Creating release with title: $release_title"
           echo "Creating release with notes: $description"
           gh release create "${file_version}" \
