@@ -68,13 +68,11 @@ jobs:
           changelog=$(gh pr list --state merged --base main --search "merged:>$latest_release_date" --json title,number,url --jq '.[] | "- PR #" + (.number|tostring) + ": [" + .title + "](" + .url + ")"')
           if [[ -z "$changelog" ]]; then
             echo "No pull requests found since the last release."
-            echo "changelog=No changes since the last release." >> $GITHUB_ENV
           else
             echo "Changelog:"
             echo "$changelog"
-            echo "changelog=$changelog" >> $GITHUB_ENV
           fi
-          description="${changelog}\n\n${description}"
+          description="${changelog}<br/><br/>${description}"
           echo "Creating release with title: $release_title"
           echo "Creating release with notes: $description"
           gh release create "${file_version}" \
