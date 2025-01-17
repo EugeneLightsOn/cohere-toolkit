@@ -43,10 +43,10 @@ jobs:
              ([ "$f_major" -eq "$l_major" ] && [ "$f_minor" -gt "$l_minor" ]) || 
              ([ "$f_major" -eq "$l_major" ] && [ "$f_minor" -eq "$l_minor" ] && [ "$f_patch" -gt "$l_patch" ]); then
             echo "new_version_needed=true" >> $GITHUB_ENV
-            echo "NEED TO CREATE A NEW RELEASE"
+            echo "NEED TO CREATE A NEW RELEASE."
           else
             echo "new_version_needed=false" >> $GITHUB_ENV
-            echo "NO NEED TO CREATE A NEW RELEASE"
+            echo "NO NEED TO CREATE A NEW RELEASE."
             exit 0
           fi
 
