@@ -46,7 +46,7 @@ jobs:
             echo "NEED TO CREATE A NEW RELEASE."
           else
             echo "new_version_needed=false" >> $GITHUB_ENV
-            echo "NO NEED TO CREATE A NEW RELEASE."
+            echo "NO NEED TO CREATE A NEW RELEASE"
             exit 0
           fi
 
