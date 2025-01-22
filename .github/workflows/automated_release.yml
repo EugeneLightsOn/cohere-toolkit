@@ -66,6 +66,6 @@ jobs:
           description="## What's Changed:\n${changelog}\n${description}"
           echo "Creating release with title: $release_title"
           gh release create "${submitted_version}" \
-            --title "$release_title" \
+            --title "$release_title" --draft \
             --notes "$(echo -e "$description")"
           echo "Release created successfully."
